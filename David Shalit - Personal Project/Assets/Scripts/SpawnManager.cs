@@ -14,7 +14,7 @@ public class SpawnManager : MonoBehaviour
     Vector3 randomSpawnPos()
     {
         float x = Random.Range(-13, 13);
-        float z = Random.Range(-2, 9);
+        float z = Random.Range(9, 9);
         return new Vector3(x, 1.0f, z);
     }
 
