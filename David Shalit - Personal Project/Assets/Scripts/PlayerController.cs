@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,15 +13,33 @@ public class PlayerController : MonoBehaviour
     public GameObject particle;
     private float powerIncrease = 1.0f;
     private float speedIncrease = 1.0f;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI gameOverText;
+    public float health = 20;
+    public bool isGameActive = true;
     void Start()
     {
-        
+        isGameActive = true;
+        gameOverText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if (isGameActive)
+        {
+            Move();
+        }
+        if (!isGameActive)
+        {
+            gameOverText.gameObject.SetActive(true);
+        }
+        
+        if(health < 1)
+        {
+            isGameActive = false;
+        }
+        healthText.text = "Health: " + health;
     }
 
     void Move()
@@ -38,6 +58,10 @@ public class PlayerController : MonoBehaviour
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
             enemyRigidbody.AddForce(awayFromPlayer * 10 * powerIncrease, ForceMode.Impulse);
             Debug.Log("Collided with enemy");
+            if (!isPowered)
+            {
+                health -= 5;
+            }
         }
         
     }
@@ -51,6 +75,7 @@ public class PlayerController : MonoBehaviour
             particle.gameObject.SetActive(true);
             Destroy(other.gameObject);
             StartCoroutine(PowerCooldown());
+            isPowered = true;
         }
     }
 
@@ -59,6 +84,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(5);
         powerIncrease = 1.0f;
         speedIncrease = 1.0f;
+        isPowered = false;
         particle.gameObject.SetActive(false);
 
     }

@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class SpawnManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject[] prefabs;
+    public PlayerController playerController;
     void Start()
     {
         InvokeRepeating("SpawnObject", 2, 2);
+        
     }
+
+
 
     Vector3 randomSpawnPos()
     {
@@ -26,6 +31,9 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (playerController.isGameActive == false)
+        {
+            CancelInvoke();
+        }
     }
 }
